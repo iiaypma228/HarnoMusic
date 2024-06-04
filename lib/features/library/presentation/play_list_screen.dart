@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hicons/flutter_hicons.dart';
 import 'package:garno_music/common/widget/track_list.dart';
 import 'package:garno_music/features/library/domain/models/play_list.dart';
+import 'package:garno_music/features/library/presentation/widget/sort_list.dart';
 
 import '../../../common/di/init.dart';
 
@@ -38,6 +39,11 @@ class _PlayListScreenState extends State<PlayListScreen> {
                       onPressed: () {}, icon: const Icon(Icons.more_vert))
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: SortList(
+                  tracks: widget.playList.tracks, onSorted: (tracks) {}),
             ),
             TrackList(
               tracks: widget.playList.tracks,

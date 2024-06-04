@@ -1,7 +1,12 @@
 import 'package:auto_route/annotations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:garno_music/common/widget/base_state.dart';
 import 'package:garno_music/features/search/presentation/widget/genres.dart';
+import 'package:garno_music/features/search/presentation/widget/search_track_delegate.dart';
+
+import '../../../generated/l10n.dart';
 
 @RoutePage()
 class SearchScreen extends StatefulWidget {
@@ -12,6 +17,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends ABaseState<SearchScreen> {
+  final inputBorder = const OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(30)),
+    borderSide: BorderSide(color: Color(0xffC2C2C2)),
+  );
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -21,23 +31,25 @@ class _SearchScreenState extends ABaseState<SearchScreen> {
         child: Column(
           children: [
             Text(
-              'Пошук',
+              S.of(context).search,
               style: theme.textTheme.labelLarge,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               child: TextField(
-                style: TextStyle(color: Color(0xff616161)),
+                readOnly: true,
+                onTap: () => showSearch(
+                  context: context,
+                  delegate: SearchTrackDelegate(),
+                ),
+                style: const TextStyle(color: Color(0xff616161)),
                 decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Color(0xffE6E6E6),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff383838)),
-                  ),
-                  hintText: 'Що бажаєте послухати?',
+                  border: inputBorder,
+                  focusedBorder: inputBorder,
+                  hintText: S.of(context).whatDoYouWantListen,
                 ),
               ),
             ),

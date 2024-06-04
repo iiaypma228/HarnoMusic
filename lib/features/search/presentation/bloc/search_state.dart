@@ -5,7 +5,14 @@ abstract class SearchState {}
 
 class SearchInitial extends SearchState {}
 
-class SearchByTagsLoaded extends SearchState {
-  SearchByTagsLoaded({required this.tracks});
+class SearchByQueryLoading extends SearchState {}
+
+class SearchByQueryLoaded extends SearchState {
+  SearchByQueryLoaded({required this.tracks});
   final List<Track> tracks;
+}
+
+class SearchByQueryError extends SearchState {
+  SearchByQueryError({required this.error});
+  final String error;
 }

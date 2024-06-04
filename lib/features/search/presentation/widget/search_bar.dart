@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../generated/l10n.dart';
 import '../../../main/domain/models/track.dart';
 
 class SearchBar extends StatefulWidget {
@@ -38,7 +39,8 @@ class _SearchBarState extends State<SearchBar> {
           borderSide: BorderSide(color: Color(0xff383838)),
         ),
         focusedBorder: OutlineInputBorder(),
-        hintText: 'Пошук тут: ${widget.searchedWhereText ?? ''}',
+        hintText:
+            '${S.of(context).findHere}: ${widget.searchedWhereText ?? ''}',
         contentPadding: EdgeInsets.symmetric(horizontal: 5),
       ),
     );

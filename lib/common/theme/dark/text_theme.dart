@@ -12,14 +12,14 @@ TextTheme _getTextTheme() {
 
 TextStyle _getBodyMediumTextStyle() {
   return const TextStyle(
-    color: Color(0xff383838),
+    color: Colors.white,
     fontSize: 20,
   );
 }
 
 TextStyle _getBodySmallTextStyle() {
   return const TextStyle(
-    color: Color(0xff797979),
+    color: Colors.white,
     fontSize: 15,
   );
 }
@@ -40,14 +40,14 @@ TextStyle _getTitleLargeTextStyle() {
 
 TextStyle _getLabelLargeTextStyle() {
   return const TextStyle(
-      color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold);
+      color: Colors.white70, fontSize: 22, fontWeight: FontWeight.bold);
 }
 
 TextStyle _getLabelMediumTextStyle() {
-  return const TextStyle(color: Colors.black, fontSize: 18);
+  return const TextStyle(color: Colors.white, fontSize: 18);
 }
 
 TextStyle _getLabelSmallTextStyle() {
   return const TextStyle(
-      color: Colors.black, fontSize: 16, fontWeight: FontWeight.w300);
+      color: Colors.white, fontSize: 16, fontWeight: FontWeight.w300);
 }

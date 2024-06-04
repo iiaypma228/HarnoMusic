@@ -1,11 +1,14 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hicons/flutter_hicons.dart';
 import 'package:garno_music/common/helpers/duration_extensions.dart';
 import 'package:garno_music/common/widget/liked_button.dart';
 import 'package:garno_music/common/widget/main_back_button.dart';
+import 'package:garno_music/common/widget/more_action_button.dart';
 import 'package:garno_music/features/main/domain/services/a_player_service.dart';
+import 'package:garno_music/router/router.dart';
 
 import '../../../common/di/init.dart';
 import '../../../common/widget/base_state.dart';
@@ -30,6 +33,7 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Scaffold(body: _getBody()),
     );
@@ -58,9 +62,7 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  IconButton(
-                      onPressed: _showBottomSheetBar,
-                      icon: const Icon(Icons.more_vert))
+                  MoreActionButton(track: widget._track)
                 ],
               ),
               const SizedBox(
@@ -87,9 +89,9 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
                   ),
                 ),
                 subtitle: Text(widget._track?.artistName ?? ''),
-                trailing: widget._track != null
+/*                trailing: widget._track != null
                     ? LikedButton(track: widget._track!)
-                    : null,
+                    : null,*/
               ),
               StreamBuilder(
                   stream: _playerService.onPositionChanged,
@@ -128,6 +130,21 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
                         PlayerButtons(
                           track: widget._track,
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                                onPressed: () => AutoRouter.of(context)
+                                    .push(const RoomRoute()),
+                                icon: const Icon(
+                                  Hicons.group_1_bold,
+                                  size: 40,
+                                ))
+                          ],
+                        )
                       ],
                     );
                   }),
@@ -149,11 +166,11 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
                   _showInputDialog(context);
                 },
                 leading: Icon(Hicons.add_bold),
-                title: Text('Підєднатися до кімнати'),
+                title: Text(S.of(context).joinToRoom),
               ),
               ListTile(
                 leading: Icon(Hicons.add_bold),
-                title: Text('Створити кімнату'),
+                title: Text(S.of(context).createRoom),
               ),
             ],
           );
@@ -168,7 +185,7 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Введіть код кімнати'),
+          title: Text(S.of(context).inputCodeRoom),
           content: TextField(
             controller: textController,
           ),
@@ -177,12 +194,11 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(S.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
                 String inputText = textController.text;
-                print('Entered text: $inputText');
                 _bloc.add(JoinToRoomEvent(code: inputText));
                 Navigator.of(context).pop();
               },

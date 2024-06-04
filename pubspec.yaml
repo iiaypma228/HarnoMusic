@@ -24,6 +24,9 @@ dependencies:
   flutter_hicons: ^0.1.0
   signalr_netcore: ^0.1.7+2-nullsafety.3
   on_audio_query: ^2.9.0
+  share_plus: ^9.0.0
+  image_picker: ^1.1.1
+  path_provider: ^2.0.0
 
 dev_dependencies:
   flutter_test:

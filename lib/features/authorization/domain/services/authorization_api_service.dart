@@ -4,10 +4,14 @@ import 'package:garno_music/features/authorization/domain/repository/sign_in_rep
 import 'package:garno_music/features/authorization/domain/services/a_authorization_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../profile/domain/models/user.dart';
+
 class AuthorizationService implements IAuthorizationService {
+  static const String _bearerTokenKey = 'token';
+  static User? currentUser;
+
   final IAuthorizationRepository _repository;
   final Dio _dio;
-  static const String _bearerTokenKey = 'token';
 
   AuthorizationService(this._dio,
       {required IAuthorizationRepository repository})
@@ -23,9 +27,13 @@ class AuthorizationService implements IAuthorizationService {
       sharedPreferences.setString(_bearerTokenKey, res.data!.access_token);
       _dio.options.headers
           .addAll({'Authorization': 'Bearer ${res.data!.access_token}'});
+
+      Future.microtask(getUser);
+
       return ServerResponse<bool>(
           isSuccess: true, data: true, errorMessage: '');
     }
+
     return ServerResponse<bool>(
         isSuccess: false, data: false, errorMessage: res.errorMessage);
   }
@@ -41,10 +49,21 @@ class AuthorizationService implements IAuthorizationService {
       sharedPreferences.setString(_bearerTokenKey, res.data!.access_token);
       _dio.options.headers
           .addAll({'Authorization': 'Bearer ${res.data!.access_token}'});
+
+      Future.microtask(getUser);
+
       return ServerResponse<bool>(
           isSuccess: true, data: true, errorMessage: '');
     }
     return ServerResponse<bool>(
         isSuccess: false, data: false, errorMessage: res.errorMessage);
+  }
+
+  @override
+  Future getUser() async {
+    var user = await _repository.getUser();
+    if (user.isSuccess) {
+      currentUser = user.data;
+    }
   }
 }

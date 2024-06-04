@@ -20,56 +20,98 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(fieldName) => "Поле ${fieldName} обов\'язкове!";
+  static String m0(fieldName) => "${fieldName} field is required!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "artists": MessageLookupByLibrary.simpleMessage("Артисти"),
-        "clickHere": MessageLookupByLibrary.simpleMessage("Натиснiть сюди"),
-        "createAccount":
-            MessageLookupByLibrary.simpleMessage("Створити акаунт"),
+        "addToLiked": MessageLookupByLibrary.simpleMessage("Додати в улюблені"),
+        "appLanguage": MessageLookupByLibrary.simpleMessage("App Language"),
+        "artists": MessageLookupByLibrary.simpleMessage("Artists"),
+        "bluesGenre": MessageLookupByLibrary.simpleMessage("Blues"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "changeAvatar": MessageLookupByLibrary.simpleMessage("Change Avatar"),
+        "classicGenre": MessageLookupByLibrary.simpleMessage("Classical"),
+        "clickHere": MessageLookupByLibrary.simpleMessage("Click here"),
+        "codeCopySuccses": MessageLookupByLibrary.simpleMessage("Code copied!"),
+        "countryGenre": MessageLookupByLibrary.simpleMessage("Country"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
+        "createPlayList": MessageLookupByLibrary.simpleMessage("Create"),
+        "createRoom": MessageLookupByLibrary.simpleMessage("Create Room"),
+        "currentRoom": MessageLookupByLibrary.simpleMessage("Current Room"),
         "doYouHaveAccount":
-            MessageLookupByLibrary.simpleMessage("Вже є аккаунт?"),
+            MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "doYouHaveMember":
-            MessageLookupByLibrary.simpleMessage("Вже є акаунт?"),
-        "email": MessageLookupByLibrary.simpleMessage("Пошта"),
-        "enjoyMusic":
-            MessageLookupByLibrary.simpleMessage("Насолоджуйтесь музикою"),
+            MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "enjoyMusic": MessageLookupByLibrary.simpleMessage("Enjoy the music"),
         "errorLoadData": MessageLookupByLibrary.simpleMessage(
-            "Виникла помилка при завантаженнi данних"),
+            "An error occurred while loading data"),
         "fieldNRequired": m0,
-        "freeInApp":
-            MessageLookupByLibrary.simpleMessage("Безкоштовно в GarnoMusic"),
-        "fullName": MessageLookupByLibrary.simpleMessage("Повне iм\'я"),
+        "findHere": MessageLookupByLibrary.simpleMessage("Find here"),
+        "freeInApp": MessageLookupByLibrary.simpleMessage("Free in GarnoMusic"),
+        "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
         "garnoMusic": MessageLookupByLibrary.simpleMessage("GARNO MUSIC"),
-        "getStarted": MessageLookupByLibrary.simpleMessage("Початок роботи"),
+        "getStarted": MessageLookupByLibrary.simpleMessage("Get Started"),
+        "goCorrectThis":
+            MessageLookupByLibrary.simpleMessage("Let\'s fix this!"),
         "harno": MessageLookupByLibrary.simpleMessage("HARNO"),
-        "ifNeedAnyHelp":
-            MessageLookupByLibrary.simpleMessage("Виникли питання?"),
+        "hipHop": MessageLookupByLibrary.simpleMessage("Hip-Hop"),
+        "ifNeedAnyHelp": MessageLookupByLibrary.simpleMessage("Need help?"),
         "incorrectEmail": MessageLookupByLibrary.simpleMessage(
-            "Введена не корректна емаiл-адресса"),
-        "likesTrack": MessageLookupByLibrary.simpleMessage("Улюблені"),
-        "localFiles": MessageLookupByLibrary.simpleMessage("Файли на пристрої"),
+            "Incorrect email address entered"),
+        "inputCodeRoom":
+            MessageLookupByLibrary.simpleMessage("Enter Room Code"),
+        "inputPlayListName":
+            MessageLookupByLibrary.simpleMessage("Enter playlist name!"),
+        "itsYou": MessageLookupByLibrary.simpleMessage("(це ви)"),
+        "jazGenre": MessageLookupByLibrary.simpleMessage("Jazz"),
+        "joinToRoom": MessageLookupByLibrary.simpleMessage("Join Room"),
+        "kickUser": MessageLookupByLibrary.simpleMessage("Kick User"),
+        "kpopGenre": MessageLookupByLibrary.simpleMessage("K-Pop"),
+        "leaveRoom": MessageLookupByLibrary.simpleMessage("Leave Room"),
+        "likesTrack": MessageLookupByLibrary.simpleMessage("Favorites"),
+        "listenHistory":
+            MessageLookupByLibrary.simpleMessage("Історія прослуховування"),
+        "localFiles": MessageLookupByLibrary.simpleMessage("Local Files"),
+        "logoutFromApp": MessageLookupByLibrary.simpleMessage("Log Out"),
+        "metalGenre": MessageLookupByLibrary.simpleMessage("Metal"),
         "millionsTrack":
-            MessageLookupByLibrary.simpleMessage("Мiльйони трекiв"),
+            MessageLookupByLibrary.simpleMessage("Millions of Tracks"),
         "musicHarno": MessageLookupByLibrary.simpleMessage("MUSIC"),
-        "myLibrary": MessageLookupByLibrary.simpleMessage("Моя медіатека"),
-        "news": MessageLookupByLibrary.simpleMessage("Новi"),
-        "notAMember": MessageLookupByLibrary.simpleMessage("Немає аккаунту?"),
+        "myLibrary": MessageLookupByLibrary.simpleMessage("My Library"),
+        "nameAlreadyUsed": MessageLookupByLibrary.simpleMessage(
+            "Така назва вже використовується!"),
+        "news": MessageLookupByLibrary.simpleMessage("News"),
+        "notAMember":
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
         "notCorrectEmail":
-            MessageLookupByLibrary.simpleMessage("Не корректна емаiл адреса"),
-        "nowPlaying": MessageLookupByLibrary.simpleMessage("Грає зараз"),
-        "or": MessageLookupByLibrary.simpleMessage("Або"),
-        "password": MessageLookupByLibrary.simpleMessage("Пароль"),
-        "podcasts": MessageLookupByLibrary.simpleMessage("Подкасти"),
+            MessageLookupByLibrary.simpleMessage("Invalid email address"),
+        "nowPlaying": MessageLookupByLibrary.simpleMessage("Now Playing"),
+        "or": MessageLookupByLibrary.simpleMessage("Or"),
+        "pankGenre": MessageLookupByLibrary.simpleMessage("Punk"),
+        "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "podcasts": MessageLookupByLibrary.simpleMessage("Podcasts"),
+        "popGenre": MessageLookupByLibrary.simpleMessage("Pop"),
+        "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "recoveryPassword":
-            MessageLookupByLibrary.simpleMessage("Восстановить пароль"),
-        "regestration": MessageLookupByLibrary.simpleMessage("Зареєструватись"),
-        "registerNow":
-            MessageLookupByLibrary.simpleMessage("Зареєеструватись зараз"),
-        "retryLoad": MessageLookupByLibrary.simpleMessage("Повторити"),
-        "signIn": MessageLookupByLibrary.simpleMessage("Вхiд"),
-        "tracks": MessageLookupByLibrary.simpleMessage("треков"),
-        "video": MessageLookupByLibrary.simpleMessage("Вiдео")
+            MessageLookupByLibrary.simpleMessage("Recover Password"),
+        "regestration": MessageLookupByLibrary.simpleMessage("Register"),
+        "registerNow": MessageLookupByLibrary.simpleMessage("Register now"),
+        "removeFromLiked":
+            MessageLookupByLibrary.simpleMessage("Прибрати з улюблених"),
+        "retryLoad": MessageLookupByLibrary.simpleMessage("Retry"),
+        "rockGenre": MessageLookupByLibrary.simpleMessage("Rock"),
+        "search": MessageLookupByLibrary.simpleMessage("Search"),
+        "selectLanguge":
+            MessageLookupByLibrary.simpleMessage("Select Language"),
+        "signIn": MessageLookupByLibrary.simpleMessage("Sign In"),
+        "soulGenre": MessageLookupByLibrary.simpleMessage("Soul"),
+        "tracks": MessageLookupByLibrary.simpleMessage("tracks"),
+        "video": MessageLookupByLibrary.simpleMessage("Video"),
+        "voyti": MessageLookupByLibrary.simpleMessage("Log In"),
+        "whatDoYouWantListen": MessageLookupByLibrary.simpleMessage(
+            "What do you want to listen to?"),
+        "youListenMusicSingle": MessageLookupByLibrary.simpleMessage(
+            "You are listening to music alone")
       };
 }

@@ -16,3 +16,17 @@ class LibraryLoadedState extends LibraryState {
   final PlayList likedTracks;
   final List<PlayList> playLists;
 }
+
+class PlayListCreating extends LibraryState {}
+
+class PlayListCreated extends LibraryState {
+  PlayListCreated({required this.newPlayList});
+  final PlayList newPlayList;
+}
+
+class PlayListTracksLoading extends LibraryState {}
+
+class PlayListTracksLoaded extends LibraryState {
+  PlayListTracksLoaded({required this.tracks});
+  final List<Track> tracks;
+}

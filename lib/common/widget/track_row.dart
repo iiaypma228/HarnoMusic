@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garno_music/common/helpers/duration_extensions.dart';
+import 'package:garno_music/common/widget/base_state.dart';
+import 'package:garno_music/common/widget/more_action_button.dart';
 import 'package:garno_music/common/widget/playing_button.dart';
 
 import '../../features/main/domain/models/track.dart';
@@ -24,16 +26,17 @@ class TrackRow extends StatefulWidget {
   State<TrackRow> createState() => _TrackRowState();
 }
 
-class _TrackRowState extends State<TrackRow> {
+class _TrackRowState extends ABaseState<TrackRow> {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListTile(
       contentPadding: EdgeInsets.zero,
       tileColor: Colors.transparent,
       leading: PlayingButton(track: widget.track),
       titleTextStyle: widget.titleTextStyle ??
-          const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 20),
+          theme.textTheme.labelLarge
+              ?.copyWith(fontWeight: FontWeight.w800, fontSize: 20),
       title: Text(
         widget.track.name,
       ),
@@ -46,7 +49,7 @@ class _TrackRowState extends State<TrackRow> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(Duration(seconds: widget.track.duration).totalDuration),
-          if (widget.showLikeButton) LikedButton(track: widget.track),
+          if (widget.showLikeButton) MoreActionButton(track: widget.track),
         ],
       ),
     );

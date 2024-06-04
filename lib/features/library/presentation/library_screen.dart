@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hicons/flutter_hicons.dart';
@@ -8,6 +9,9 @@ import 'package:garno_music/features/library/domain/models/play_list.dart';
 import 'package:garno_music/features/library/presentation/bloc/library_bloc.dart';
 import 'package:garno_music/features/library/presentation/widget/liked_music.dart';
 import 'package:garno_music/features/library/presentation/widget/local_music.dart';
+import 'package:garno_music/features/library/presentation/widget/paly_list_row.dart';
+import 'package:garno_music/features/library/presentation/widget/search_play_list_delegate.dart';
+import 'package:garno_music/router/router.dart';
 
 import '../../../common/di/init.dart';
 import '../../../common/widget/base_state.dart';
@@ -22,6 +26,7 @@ class LibraryScreen extends StatefulWidget {
   bool isLoading = false;
   PlayList local = PlayList.empty();
   PlayList liked = PlayList.empty();
+  List<PlayList> playLists = [];
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
 }
@@ -30,7 +35,7 @@ class _LibraryScreenState extends ABaseState<LibraryScreen> {
   @override
   void initState() {
     super.initState();
-    _bloc.add(LoadLibraryEvent());
+    //_bloc.add(LoadLibraryEvent());
   }
 
   final _likedBloc = sl<LikedBloc>();
@@ -46,6 +51,7 @@ class _LibraryScreenState extends ABaseState<LibraryScreen> {
           if (state is LibraryLoadedState) {
             widget.liked = state.likedTracks;
             widget.local = state.localTracks;
+            widget.playLists = state.playLists;
           }
 
           return Padding(
@@ -56,17 +62,22 @@ class _LibraryScreenState extends ABaseState<LibraryScreen> {
                     children: [
                       Row(
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           Text(
                             S.of(context).myLibrary,
                             style: theme.textTheme.labelLarge,
                           ),
-                          Spacer(),
+                          const Spacer(),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () => showSearch(
+                                  delegate: SearchPlayListDelegate(
+                                      playLists: widget.playLists),
+                                  context: context),
                               icon: const Icon(Hicons.search_2_light_outline)),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () => AutoRouter.of(context).push(
+                                CreatePlaylistRoute(
+                                    playLists: widget.playLists)),
                             icon: const Icon(
                               Hicons.add_light_outline,
                               size: 30,
@@ -77,8 +88,19 @@ class _LibraryScreenState extends ABaseState<LibraryScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      LocalMusic(localTracks: widget.local),
-                      _getLikedMusicBody(),
+                      Expanded(
+                          child: ListView.builder(
+                              itemCount: widget.playLists.length + 2,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return LocalMusic(localTracks: widget.local);
+                                } else if (index == 1) {
+                                  return _getLikedMusicBody();
+                                }
+
+                                return PlayListRow(
+                                    playList: widget.playLists[index - 2]);
+                              }))
                     ],
                   ),
           );

@@ -52,4 +52,26 @@ class TrackApiRepository implements ITrackRepository {
           errorMessage: e.response?.data ?? e.message);
     }
   }
+
+  @override
+  Future<ServerResponse<List<Track>>> getTrackByQuery(
+      int skip, int take, String query) async {
+    try {
+      var result = await _datasource.getTracksByQuery(skip, take, query);
+      if (result.statusCode == 200) {
+        var r = List.from(result.data)
+            .map((dynamic i) => Track.fromJson(i))
+            .toList();
+        return ServerResponse<List<Track>>(
+            isSuccess: true, data: r, errorMessage: '');
+      }
+      return ServerResponse<List<Track>>(
+          isSuccess: false, data: null, errorMessage: result.data);
+    } on DioException catch (e) {
+      return ServerResponse<List<Track>>(
+          isSuccess: false,
+          data: null,
+          errorMessage: e.response?.data ?? e.message);
+    }
+  }
 }

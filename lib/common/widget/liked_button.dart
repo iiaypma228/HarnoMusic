@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hicons/flutter_hicons.dart';
 
 import '../../features/main/domain/models/track.dart';
+import '../../generated/l10n.dart';
 import '../bloc/liked/liked_bloc.dart';
 import '../di/init.dart';
 
@@ -25,30 +26,36 @@ class _LikedButtonState extends State<LikedButton> {
       builder: (context, state) {
         if (state is LikedAdded && state.track.id == widget.track.id) {
           widget._isLiked = true;
-          return IconButton(
-              onPressed: () {
+          return ListTile(
+              onTap: () {
                 _bloc.add(RemoveLikeEvent(track: widget.track));
               },
-              icon: Icon(Hicons.heart_1_bold, color: Color(0xff9456F9)));
+              title: Text(S.of(context).removeFromLiked),
+              leading: Icon(Hicons.heart_1_bold, color: Color(0xff9456F9)));
         } else if (state is LikedRemove && state.track.id == widget.track.id) {
           widget._isLiked = false;
-          return IconButton(
-              onPressed: () {
+          return ListTile(
+              onTap: () {
                 _bloc.add(AddLikeEvent(track: widget.track));
               },
-              icon: Icon(Hicons.heart_1_light_outline));
+              title: Text(S.of(context).addToLiked),
+              leading: Icon(Hicons.heart_1_light_outline));
         } else if (widget._isLiked) {
-          return IconButton(
-              onPressed: () {
-                _bloc.add(RemoveLikeEvent(track: widget.track));
-              },
-              icon: Icon(Hicons.heart_1_bold, color: Color(0xff9456F9)));
+          return ListTile(
+            onTap: () {
+              _bloc.add(RemoveLikeEvent(track: widget.track));
+            },
+            leading: Icon(Hicons.heart_1_bold, color: Color(0xff9456F9)),
+            title: Text(S.of(context).removeFromLiked),
+          );
         } else {
-          return IconButton(
-              onPressed: () {
-                _bloc.add(AddLikeEvent(track: widget.track));
-              },
-              icon: Icon(Hicons.heart_1_light_outline));
+          return ListTile(
+            onTap: () {
+              _bloc.add(AddLikeEvent(track: widget.track));
+            },
+            leading: Icon(Hicons.heart_1_light_outline),
+            title: Text(S.of(context).addToLiked),
+          );
         }
       },
     );

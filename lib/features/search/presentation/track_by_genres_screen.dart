@@ -68,7 +68,10 @@ class _TrackByGenresScreenState extends State<TrackByGenresScreen> {
                     ),
                     pinned: true,
                     leading: IconButton(
-                      icon: const Icon(Icons.arrow_back),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: widget.model.color,
+                      ),
                       onPressed: () {
                         if (_showSearchBar) {
                           setState(() => _showSearchBar = false);
@@ -84,7 +87,8 @@ class _TrackByGenresScreenState extends State<TrackByGenresScreen> {
                             onPressed: () {
                               setState(() => _showSearchBar = true);
                             },
-                            icon: const Icon(Hicons.search_2_light_outline)),
+                            icon: Icon(Hicons.search_2_light_outline,
+                                color: widget.model.color)),
                     ],
                     title: Padding(
                       padding: const EdgeInsets.only(right: 30),

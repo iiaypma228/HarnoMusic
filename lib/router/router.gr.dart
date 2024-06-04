@@ -15,10 +15,32 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    CreatePlaylistRoute.name: (routeData) {
+      final args = routeData.argsAs<CreatePlaylistRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CreatePlaylistScreen(
+          key: args.key,
+          playLists: args.playLists,
+        ),
+      );
+    },
+    HistoryRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HistoryScreen(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const HomeScreen(),
+      );
+    },
+    InputCodeRoomRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const InputCodeRoomScreen(),
       );
     },
     LibraryRoute.name: (routeData) {
@@ -61,6 +83,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const ProfileScreen(),
+      );
+    },
+    RoomRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RoomScreen(),
       );
     },
     SearchRoute.name: (routeData) {
@@ -107,6 +135,58 @@ abstract class _$AppRouter extends RootStackRouter {
 }
 
 /// generated route for
+/// [CreatePlaylistScreen]
+class CreatePlaylistRoute extends PageRouteInfo<CreatePlaylistRouteArgs> {
+  CreatePlaylistRoute({
+    Key? key,
+    required List<PlayList> playLists,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CreatePlaylistRoute.name,
+          args: CreatePlaylistRouteArgs(
+            key: key,
+            playLists: playLists,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CreatePlaylistRoute';
+
+  static const PageInfo<CreatePlaylistRouteArgs> page =
+      PageInfo<CreatePlaylistRouteArgs>(name);
+}
+
+class CreatePlaylistRouteArgs {
+  const CreatePlaylistRouteArgs({
+    this.key,
+    required this.playLists,
+  });
+
+  final Key? key;
+
+  final List<PlayList> playLists;
+
+  @override
+  String toString() {
+    return 'CreatePlaylistRouteArgs{key: $key, playLists: $playLists}';
+  }
+}
+
+/// generated route for
+/// [HistoryScreen]
+class HistoryRoute extends PageRouteInfo<void> {
+  const HistoryRoute({List<PageRouteInfo>? children})
+      : super(
+          HistoryRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HistoryRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [HomeScreen]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -116,6 +196,20 @@ class HomeRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'HomeRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [InputCodeRoomScreen]
+class InputCodeRoomRoute extends PageRouteInfo<void> {
+  const InputCodeRoomRoute({List<PageRouteInfo>? children})
+      : super(
+          InputCodeRoomRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'InputCodeRoomRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -262,6 +356,20 @@ class ProfileRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ProfileRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RoomScreen]
+class RoomRoute extends PageRouteInfo<void> {
+  const RoomRoute({List<PageRouteInfo>? children})
+      : super(
+          RoomRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RoomRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

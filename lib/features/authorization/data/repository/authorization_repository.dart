@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:garno_music/common/models/server_response.dart';
+import 'package:garno_music/features/profile/domain/models/user.dart';
 
 import '../../domain/repository/sign_in_repository.dart';
 import '../datasource/a_authorization_datasource.dart';
@@ -55,6 +56,23 @@ class AuthorizationApiRepository implements IAuthorizationRepository {
       return ServerResponse<JwtTokenDto>(
           isSuccess: false, data: null, errorMessage: e.message);
     }
-    ;
+  }
+
+  @override
+  Future<ServerResponse<User>> getUser() async {
+    try {
+      var res = await _datasource.getUser();
+
+      if (res.statusCode == 200) {
+        return ServerResponse<User>(
+            isSuccess: true, data: User.fromJson(res.data), errorMessage: '');
+      }
+
+      return ServerResponse<User>(
+          isSuccess: false, data: null, errorMessage: res.data);
+    } on DioException catch (e) {
+      return ServerResponse<User>(
+          isSuccess: false, data: null, errorMessage: e.message);
+    }
   }
 }

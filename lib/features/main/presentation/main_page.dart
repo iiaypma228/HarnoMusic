@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart' as cu;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hicons/flutter_hicons.dart';
 import 'package:garno_music/common/bloc/liked/liked_bloc.dart';
+import 'package:garno_music/common/widget/base_state.dart';
+import 'package:garno_music/features/library/presentation/bloc/library_bloc.dart';
 import 'package:garno_music/features/main/presentation/widget/player_status_bar.dart';
 import 'package:garno_music/router/router.dart';
 
@@ -21,17 +23,19 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends ABaseState<MainPage> {
   final _bloc = sl<PlayerBloc>();
-
+  final _libraryBloc = sl<LibraryBloc>();
   @override
   void initState() {
     super.initState();
     sl<LikedBloc>().add(LoadLikedEvent());
+    _libraryBloc.add(LoadLibraryEvent());
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return AutoTabsRouter(
       routes: [
         const HomeRoute(),
@@ -59,6 +63,8 @@ class _MainPageState extends State<MainPage> {
                     currentIndex: tabsRouter.activeIndex,
                     unselectedItemColor: const Color(0xff808080),
                     selectedItemColor: const Color(0xff9456F9),
+                    backgroundColor:
+                        theme.bottomNavigationBarTheme.backgroundColor,
                     items: const [
                       BottomNavigationBarItem(
                           icon: Icon(Hicons.home_2_bold), label: ''),

@@ -21,4 +21,9 @@ class AuthorizationApiDatasource implements IAuthorizationDatasource {
         data: jsonEncode(dto.toJson()),
         queryParameters: {'tokenlifitime': tokenLifitime ?? 60 * 1500});
   }
+
+  @override
+  Future<Response> getUser() async {
+    return await _dio.get('/api/user/getCurrentUser');
+  }
 }

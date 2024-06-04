@@ -65,4 +65,17 @@ class TrackService implements ITrackService {
     }
     return res;
   }
+
+  @override
+  Future<ServerResponse<List<Track>>> getTracksByQuery(String query) async {
+    var res = await _repository.getTrackByQuery(0, 200, query);
+    if (res.isSuccess && res.data!.isNotEmpty) {
+      _skipTracksByTags += _takeTracksByTags;
+      for (var i in res.data!) {
+        i.source = UrlSource(i.audioUrl);
+        i.imageSource = Image.network(i.image);
+      }
+    }
+    return res;
+  }
 }

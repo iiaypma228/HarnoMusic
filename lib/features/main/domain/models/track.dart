@@ -14,6 +14,7 @@ class Track implements IJsonModel<Track> {
       required this.albumName,
       required this.albumId,
       required this.audioUrl,
+      required this.audioDownload,
       required this.albumImage,
       required this.image,
       this.source,
@@ -28,6 +29,7 @@ class Track implements IJsonModel<Track> {
   final String? albumName;
   final int albumId;
   final String audioUrl;
+  final String? audioDownload;
   final String albumImage;
   final String image;
   @JsonKey(includeToJson: false, includeFromJson: false)

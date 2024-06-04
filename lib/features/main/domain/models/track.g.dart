@@ -14,6 +14,7 @@ Track _$TrackFromJson(Map<String, dynamic> json) => Track(
       albumName: json['albumName'] as String?,
       albumId: (json['albumId'] as num).toInt(),
       audioUrl: json['audioUrl'] as String,
+      audioDownload: json['audioDownload'] as String?,
       albumImage: json['albumImage'] as String,
       image: json['image'] as String,
     );
@@ -26,6 +27,7 @@ Map<String, dynamic> _$TrackToJson(Track instance) => <String, dynamic>{
       'albumName': instance.albumName,
       'albumId': instance.albumId,
       'audioUrl': instance.audioUrl,
+      'audioDownload': instance.audioDownload,
       'albumImage': instance.albumImage,
       'image': instance.image,
     };

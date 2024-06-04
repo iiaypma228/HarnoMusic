@@ -63,18 +63,14 @@ class _AlbumListState extends ABaseState<AlbumList> {
                           Text(
                             textAlign: TextAlign.left,
                             item.name,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16),
+                            style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w500, fontSize: 16),
                           ),
                           Text(
                             textAlign: TextAlign.left,
                             item.artistName,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 12),
+                            style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w300, fontSize: 12),
                           )
                         ],
                       ),

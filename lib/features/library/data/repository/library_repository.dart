@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:garno_music/common/models/server_response.dart';
 import 'package:garno_music/features/library/data/datasource/i_library_datasource.dart';
+import 'package:garno_music/features/library/domain/models/play_list.dart';
 import 'package:garno_music/features/library/domain/repository/i_library_repository.dart';
 import 'package:garno_music/features/main/domain/models/track.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -33,6 +34,7 @@ class LibraryRepository implements ILibraryRepository {
               albumName: el.album ?? '',
               albumId: el.albumId ?? 0,
               audioUrl: el.data,
+              audioDownload: null,
               albumImage: '',
               image: '',
               source: DeviceFileSource(el.data)))
@@ -103,7 +105,111 @@ class LibraryRepository implements ILibraryRepository {
       var res = await _datasource.deleteLikeTrack(track);
 
       if (res.statusCode == 200) {
-        return ServerResponse(isSuccess: true, data: true, errorMessage: '');
+        var resultList =
+            List.from(res.data).map((dynamic i) => Track.fromJson(i)).toList();
+        return ServerResponse(
+            isSuccess: true, data: resultList, errorMessage: '');
+      }
+      return ServerResponse(
+          isSuccess: false, data: null, errorMessage: res.data);
+    } on DioException catch (e) {
+      return ServerResponse(
+          isSuccess: false,
+          data: null,
+          errorMessage: e.response?.data ?? e.message);
+    }
+  }
+
+  @override
+  Future<ServerResponse<PlayList>> createPlayList(String name) async {
+    try {
+      var res = await _datasource.createPlayList(name);
+
+      if (res.statusCode == 200) {
+        return ServerResponse<PlayList>(
+            isSuccess: true,
+            data: PlayList.fromJson(res.data),
+            errorMessage: '');
+      }
+      return ServerResponse<PlayList>(
+          isSuccess: false, data: null, errorMessage: res.data);
+    } on DioException catch (e) {
+      return ServerResponse<PlayList>(
+          isSuccess: false,
+          data: null,
+          errorMessage: e.response?.data ?? e.message);
+    }
+  }
+
+  @override
+  Future<ServerResponse<List<Track>>> getPlayListTracks(int playListId) async {
+    try {
+      var res = await _datasource.getPlayListTracks(playListId);
+
+      if (res.statusCode == 200) {
+        var resultList =
+            List.from(res.data).map((dynamic i) => Track.fromJson(i)).toList();
+        return ServerResponse(
+            isSuccess: true, data: resultList, errorMessage: '');
+      }
+      return ServerResponse(
+          isSuccess: false, data: null, errorMessage: res.data);
+    } on DioException catch (e) {
+      return ServerResponse(
+          isSuccess: false,
+          data: null,
+          errorMessage: e.response?.data ?? e.message);
+    }
+  }
+
+  @override
+  Future<ServerResponse<List<PlayList>>> getPlayLists() async {
+    try {
+      var res = await _datasource.getPlayLists();
+
+      if (res.statusCode == 200) {
+        var resultList = List.from(res.data)
+            .map((dynamic i) => PlayList.fromJson(i))
+            .toList();
+        return ServerResponse(
+            isSuccess: true, data: resultList, errorMessage: '');
+      }
+      return ServerResponse(
+          isSuccess: false, data: null, errorMessage: res.data);
+    } on DioException catch (e) {
+      return ServerResponse(
+          isSuccess: false,
+          data: null,
+          errorMessage: e.response?.data ?? e.message);
+    }
+  }
+
+  @override
+  Future<ServerResponse> downloadTrack(String url, String filename) async {
+    try {
+      var res = await _datasource.downloadTrack(url, filename);
+
+      if (res.statusCode == 200) {
+        return ServerResponse(isSuccess: true, data: null, errorMessage: '');
+      }
+      return ServerResponse(
+          isSuccess: false, data: null, errorMessage: res.data);
+    } on DioException catch (e) {
+      return ServerResponse(
+          isSuccess: false,
+          data: null,
+          errorMessage: e.response?.data ?? e.message);
+    }
+  }
+
+  @override
+  Future<ServerResponse> addTrackToPlayList(
+      Track track, PlayList playList) async {
+    try {
+      var res = await _datasource.addTrackToPlayList(track, playList.id);
+
+      if (res.statusCode == 200) {
+        return ServerResponse(isSuccess: true, data: null, errorMessage: '');
       }
       return ServerResponse(
           isSuccess: false, data: null, errorMessage: res.data);

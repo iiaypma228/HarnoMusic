@@ -8,11 +8,13 @@ class User implements IJsonModel<User> {
       {required this.id,
       required this.email,
       required this.username,
-      required this.password});
+      required this.password,
+      this.avatar});
   final int id;
   final String email;
   final String username;
   final String password;
+  final String? avatar;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

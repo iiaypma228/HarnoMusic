@@ -20,4 +20,11 @@ class TrackApiDatasource implements ITrackDatasource {
         queryParameters: {'skip': skip, 'take': take, 'tags': tags});
     return result;
   }
+
+  @override
+  Future<Response> getTracksByQuery(int skip, int take, String query) async {
+    var result = await _dio.get('/api/track/trackByQuery',
+        queryParameters: {'skip': skip, 'take': take, 'query': query});
+    return result;
+  }
 }

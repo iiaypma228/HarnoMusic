@@ -29,6 +29,7 @@ import 'package:garno_music/features/library/data/repository/library_repository.
 import 'package:garno_music/features/library/domain/repository/i_library_repository.dart';
 import 'package:garno_music/features/library/domain/services/I_library_service.dart';
 import 'package:garno_music/features/library/domain/services/library_service.dart';
+import 'package:garno_music/features/library/presentation/bloc/download/download_bloc.dart';
 import 'package:garno_music/features/library/presentation/bloc/library_bloc.dart';
 import 'package:garno_music/features/main/data/datasource/a_together_listening_datasource.dart';
 import 'package:garno_music/features/main/data/datasource/together_listening_api_datasource.dart';
@@ -39,6 +40,14 @@ import 'package:garno_music/features/main/domain/services/a_together_listening_s
 import 'package:garno_music/features/main/domain/services/player_service.dart';
 import 'package:garno_music/features/main/domain/services/together_listening_service.dart';
 import 'package:garno_music/features/main/presentation/bloc/player_bloc.dart';
+import 'package:garno_music/features/profile/data/datasource/a_user_datasource.dart';
+import 'package:garno_music/features/profile/data/datasource/user_api_datasource.dart';
+import 'package:garno_music/features/profile/data/repository/user_repository.dart';
+import 'package:garno_music/features/profile/domain/repository/a_user_repository.dart';
+import 'package:garno_music/features/profile/domain/service/a_user_service.dart';
+import 'package:garno_music/features/profile/domain/service/user_service.dart';
+import 'package:garno_music/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:garno_music/features/profile/presentation/bloc/track_history/track_history_bloc.dart';
 import 'package:garno_music/features/search/presentation/bloc/genres/genres_bloc.dart';
 import 'package:garno_music/features/search/presentation/bloc/search_bloc.dart';
 import 'package:garno_music/features/welcome/domain/services/a_welcome_service.dart';
@@ -59,19 +68,25 @@ Future<void> initDI() async {
     ..registerLazySingleton(() => TrackBloc(sl()))
     ..registerLazySingleton(() => LikedBloc(sl()))
     ..registerLazySingleton(() => LibraryBloc(sl()))
-    ..registerLazySingleton(() => SearchBloc())
+    ..registerLazySingleton(() => SearchBloc(sl()))
     ..registerLazySingleton(() => GenresBloc(sl()))
+    ..registerLazySingleton(() => ProfileBloc(sl()))
+    ..registerLazySingleton(() => DownloadBloc(sl()))
+    ..registerLazySingleton(() => TrackHistoryBloc(sl()))
     //SERVICE
     ..registerLazySingleton<IAuthorizationService>(
         () => AuthorizationService(sl(), repository: sl()))
-    ..registerLazySingleton<IPlayerService>(() => PlayerService(player: sl()))
+    ..registerLazySingleton<IPlayerService>(
+        () => PlayerService(player: sl(), service: sl()))
     ..registerLazySingleton<IAlbumService>(() => AlbumService(repository: sl()))
     ..registerLazySingleton<ITrackService>(() => TrackService(repository: sl()))
-    ..registerLazySingleton<IWelcomeService>(() => WelcomeService(dio: sl()))
+    ..registerLazySingleton<IWelcomeService>(
+        () => WelcomeService(sl(), dio: sl()))
     ..registerLazySingleton<ITogetherListeningService>(
         () => TogetherListeningService(repository: sl()))
     ..registerLazySingleton<ILibraryService>(
         () => LibraryService(repository: sl()))
+    ..registerLazySingleton<IUserService>(() => UserService(repository: sl()))
     //REPOSITORY
     ..registerLazySingleton<IAuthorizationRepository>(
         () => AuthorizationApiRepository(datasource: sl()))
@@ -83,7 +98,8 @@ Future<void> initDI() async {
         () => TogetherListeningRepository(datasource: sl()))
     ..registerLazySingleton<ILibraryRepository>(
         () => LibraryRepository(datasource: sl()))
-
+    ..registerLazySingleton<IUserRepository>(
+        () => UserRepository(datasource: sl()))
     //Datasource
     ..registerLazySingleton<IAuthorizationDatasource>(
         () => AuthorizationApiDatasource(dio: sl()))
@@ -95,7 +111,7 @@ Future<void> initDI() async {
         () => TogetherListeningApiDatasource(dio: sl()))
     ..registerLazySingleton<ILibraryDatasource>(
         () => LibraryApiDatasource(dio: sl()))
-
+    ..registerLazySingleton<IUserDatasource>(() => UserApiDatasource(dio: sl()))
     //utils
     ..registerLazySingleton(
         () => Dio(BaseOptions(baseUrl: API_URL, validateStatus: (s) => true)))

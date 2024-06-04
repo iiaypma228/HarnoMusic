@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hicons/flutter_hicons.dart';
+import 'package:garno_music/common/widget/auto_scrolled_text.dart';
 import 'package:garno_music/common/widget/liked_button.dart';
+import 'package:garno_music/common/widget/more_action_button.dart';
 import 'package:garno_music/router/router.dart';
 
 import '../../../../common/di/init.dart';
@@ -33,6 +35,9 @@ class _PlayerStatusBarState extends ABaseState<PlayerStatusBar> {
             onTap: () =>
                 AutoRouter.of(context).push(PlayerRoute(track: widget._track)),
             child: ListTile(
+              selectedColor: theme.bottomNavigationBarTheme.backgroundColor,
+              selectedTileColor: theme.bottomNavigationBarTheme.backgroundColor,
+              selected: true,
               tileColor: const Color(0xffE6E6E6),
               leading: widget._track?.imageSource ??
                   Image.asset('assets/images/music_note.png'),
@@ -43,7 +48,7 @@ class _PlayerStatusBarState extends ABaseState<PlayerStatusBar> {
               subtitle: Text(widget._track?.artistName ?? '',
                   style: theme.textTheme.labelSmall),
               trailing: widget._track != null
-                  ? LikedButton(track: widget._track!)
+                  ? MoreActionButton(track: widget._track!)
                   : null,
             ));
       },
