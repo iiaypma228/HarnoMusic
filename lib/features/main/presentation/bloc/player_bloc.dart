@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:garno_music/features/authorization/domain/services/authorization_api_service.dart';
+import 'package:garno_music/features/main/domain/models/chat_history.dart';
 import 'package:garno_music/features/main/domain/models/track.dart';
 import 'package:meta/meta.dart';
 
@@ -27,11 +29,19 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     on<CreateRoomEvent>(_onCreateRoom);
     on<GetRoomStateEvent>(_onLoadRoomState);
     on<LeaveRoomEvent>(_onLeaveRoom);
+    on<SendMessageEvent>(_onSendMessage);
+    on<SeekTrackEvent>((event, emit) async {
+      await _service.seek(event.position);
+    });
     on<_UserJoinedEvent>((event, emit) {
       emit(UserConnectedToRoom(user: event.user));
     });
     on<_UserDisconnectedEvent>((event, emit) {
+      debugPrint("USEEEER DISCONNECT BLOC EVENT");
       emit(UserDisconnectedFromRoom(user: event.user));
+    });
+    on<_NewMessageEvent>((event, emit) {
+      emit(NewRoomMessage(message: event.message));
     });
   }
 
@@ -72,8 +82,11 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   Future _onLoadRoomState(
       GetRoomStateEvent event, Emitter<PlayerState> emit) async {
+    emit(RoomStateLoading());
     emit(RoomStateLoaded(
-        code: _togetherService.getCode(), users: _togetherService.getUsers()));
+        code: _togetherService.getCode(),
+        users: _togetherService.getUsers(),
+        chatHistory: await _togetherService.getChatHistory()));
   }
 
   Future _onJoinRoomEvent(
@@ -111,17 +124,24 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     }));
 
     //disconnected
-    _subscriptions.add(_togetherService.onDisconnected.listen((data) async {
+    _subscriptions.add(_togetherService.onDisconnected.listen((data) {
       add(LeaveRoomEvent());
     }));
 
     //disconnected user
-    _subscriptions.add(_togetherService.onDisconnectedUser.listen((data) async {
+    _subscriptions.add(_togetherService.onDisconnectedUser.listen((data) {
       add(_UserDisconnectedEvent(user: User.fromJson(jsonDecode(data))));
     }));
 
+    //new message
+    _subscriptions.add(_togetherService.onNewMessage.listen((data) {
+      add(_NewMessageEvent(message: data));
+    }));
+
     emit(ConnectingToRoomSuccess(
-        code: event.code, users: _togetherService.getUsers()));
+        code: event.code,
+        users: _togetherService.getUsers(),
+        chatHistory: await _togetherService.getChatHistory()));
   }
 
   Future _onCreateRoom(CreateRoomEvent event, Emitter<PlayerState> emit) async {
@@ -131,7 +151,33 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     _subscriptions.add(_togetherService.onNewJoined.listen((user) {
       add(_UserJoinedEvent(user: user));
     }));
+    //new message
+    _subscriptions.add(_togetherService.onNewMessage.listen((data) {
+      add(_NewMessageEvent(message: data));
+    }));
+
+    //disconnected
+    _subscriptions.add(_togetherService.onDisconnected.listen((data) {
+      add(LeaveRoomEvent());
+    }));
+
+    //disconnected user
+    _subscriptions.add(_togetherService.onDisconnectedUser.listen((data) {
+      debugPrint("USEEEER DISCONNECT");
+      add(_UserDisconnectedEvent(user: User.fromJson(jsonDecode(data))));
+    }));
+
     emit(RoomCreatedState(code: code));
+  }
+
+  Future _onSendMessage(
+      SendMessageEvent event, Emitter<PlayerState> emit) async {
+    await _togetherService.sendMessage(event.message);
+    emit(NewRoomMessage(
+        message: ChatHistory(
+            date: DateTime.now(),
+            user: AuthorizationService.currentUser!,
+            message: event.message)));
   }
 
   Future _onLeaveRoom(LeaveRoomEvent event, Emitter<PlayerState> emit) async {

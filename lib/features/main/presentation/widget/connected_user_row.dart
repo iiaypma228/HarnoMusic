@@ -22,35 +22,34 @@ class ConnectedUserRow extends StatefulWidget {
 class _ConnectedUserRowState extends State<ConnectedUserRow> {
   @override
   Widget build(BuildContext context) {
-    final isCurrent = AuthorizationService.currentUser == widget.user;
+    final isCurrent = AuthorizationService.currentUser!.id == widget.user.id;
 
     return ListTile(
-      leading: ClipOval(
-        child: widget.user.avatar != null
-            ? Image.network(
-                API_URL + widget.user.avatar!,
-                fit: BoxFit.cover,
-                width: 50,
-                height: 50,
+        leading: ClipOval(
+          child: widget.user.avatar != null
+              ? Image.network(
+                  API_URL + widget.user.avatar!,
+                  fit: BoxFit.cover,
+                  width: 50,
+                  height: 50,
+                )
+              : Image.asset(
+                  'assets/images/no_avatar.png',
+                  fit: BoxFit.cover,
+                  width: 50,
+                  height: 50,
+                ),
+        ),
+        title: Text(
+            widget.user.username + (isCurrent ? S.of(context).itsYou : '')),
+        trailing: !isCurrent && widget.isMaintainer
+            ? ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Colors.redAccent),
+                ),
+                onPressed: () {},
+                child: Text(S.of(context).kickUser),
               )
-            : Image.asset(
-                'assets/images/no_avatar.png',
-                fit: BoxFit.cover,
-                width: 50,
-                height: 50,
-              ),
-      ),
-      title:
-          Text(widget.user.username + (isCurrent ? S.of(context).itsYou : '')),
-      trailing: isCurrent || !widget.isMaintainer
-          ? null
-          : ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.redAccent),
-              ),
-              onPressed: () {},
-              child: Text(S.of(context).kickUser),
-            ),
-    );
+            : null);
   }
 }

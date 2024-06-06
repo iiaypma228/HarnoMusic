@@ -11,6 +11,7 @@ const String lastTrackJsonKey = 'last_track_json';
 class PlayerService implements IPlayerService {
   final AudioPlayer _player;
   final IUserService _profileService;
+  Duration _currentDuration = const Duration();
   Track? _currentTrack;
 
   PlayerService({required AudioPlayer player, required IUserService service})
@@ -24,6 +25,9 @@ class PlayerService implements IPlayerService {
   Stream<Duration> get onPositionChanged => _player.onPositionChanged;
 
   @override
+  Duration get currentDuration => _currentDuration;
+
+  @override
   Track? get currentTrack => _currentTrack;
 
   @override
@@ -33,8 +37,16 @@ class PlayerService implements IPlayerService {
     track.source ??= UrlSource(track.audioUrl);
 
     await _player.play(track.source!);
+    _player.onPositionChanged.listen((onData) {
+      _currentDuration = onData;
+    });
     Future.microtask(() async => await _saveAsLatTrack(track));
     Future.microtask(() async => await _profileService.saveHistoryTrack(track));
+  }
+
+  @override
+  Future seek(Duration seek) async {
+    await _player.seek(seek);
   }
 
   @override

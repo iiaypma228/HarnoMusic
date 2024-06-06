@@ -5,20 +5,27 @@ import '../../../main/domain/models/track.dart';
 
 enum _SortType { Date, Author, Alphabet }
 
-class SortList extends StatelessWidget {
-  SortList({super.key, required this.tracks, required this.onSorted});
+class SortList extends StatefulWidget {
+  SortList({super.key, required this.tracks, required this.builder});
+  final WidgetBuilder builder;
   final List<Track> tracks;
-  final void Function(List<Track>) onSorted;
+  String _currentSortable = 'Немає';
+  @override
+  State<SortList> createState() => _SortListState();
+}
 
-  String _currentSortedText = 'Немає';
-
+class _SortListState extends State<SortList> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _buildSortedButton(context),
-      ],
+    return SizedBox(
+      child: Column(
+        children: [
+          _buildSortedButton(context),
+          Expanded(
+            child: Container(child: widget.builder(context)),
+          )
+        ],
+      ),
     );
   }
 
@@ -26,11 +33,12 @@ class SortList extends StatelessWidget {
     return IconButton(
         onPressed: () {
           _showBottomBar(context);
-          tracks.sort((a, b) => a.name.compareTo(b.name));
-          onSorted(tracks);
         },
         icon: Row(
-          children: [Icon(Hicons.swap_1_light_outline), Text('По алфавиту')],
+          children: [
+            const Icon(Hicons.swap_1_light_outline),
+            Text(widget._currentSortable)
+          ],
         ));
   }
 
@@ -40,24 +48,54 @@ class SortList extends StatelessWidget {
         builder: (context) {
           return Container(
             padding: const EdgeInsets.all(16.0),
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.share),
+                  leading: Icon(Icons.close),
                   title: Text('Немає'),
+                  onTap: () {
+                    setState(() {
+                      // widget.tracks.sort((a, b) => a.name.compareTo(b.name));
+                      widget._currentSortable = 'Немає';
+                    });
+                    Navigator.of(context).pop();
+                  },
                 ),
                 ListTile(
-                  leading: Icon(Icons.share),
+                  leading: Icon(Icons.sort_by_alpha),
                   title: Text('За назвою'),
+                  onTap: () {
+                    setState(() {
+                      widget.tracks.sort((a, b) => a.name.compareTo(b.name));
+                      widget._currentSortable = 'За назвою';
+                    });
+                    Navigator.of(context).pop();
+                  },
                 ),
                 ListTile(
-                  leading: Icon(Icons.share),
+                  leading: Icon(Icons.sort_by_alpha),
                   title: Text('За виконавцем'),
+                  onTap: () {
+                    setState(() {
+                      widget.tracks
+                          .sort((a, b) => a.artistName.compareTo(b.artistName));
+                      widget._currentSortable = 'За виконавцем';
+                    });
+                    Navigator.of(context).pop();
+                  },
                 ),
                 ListTile(
-                  leading: Icon(Icons.share),
+                  leading: Icon(Icons.sort),
                   title: Text('За тривалість'),
+                  onTap: () {
+                    setState(() {
+                      widget.tracks
+                          .sort((a, b) => a.duration.compareTo(b.duration));
+                      widget._currentSortable = 'За тривалість';
+                    });
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             ),

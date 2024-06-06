@@ -26,28 +26,22 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         child: Column(
           children: [
             Row(
               children: [
-                const Spacer(),
-                const Logo(),
-                const Spacer(),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.more_vert,
-                      color: Color(0xff7D7D7D),
-                    ))
+                Spacer(),
+                Logo(),
+                Spacer(),
               ],
             ),
-            const SizedBox(
+            SizedBox(
               height: 20,
             ),
-            const NewsTab(),
+            NewsTab(),
           ],
         ),
       ),

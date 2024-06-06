@@ -103,11 +103,16 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
                           activeColor: Color(0xff434343),
                           overlayColor:
                               WidgetStateProperty.all(const Color(0xff434343)),
-                          value: data.data?.inSeconds.toDouble() ?? 0,
+                          value: data.data?.inSeconds.toDouble() ??
+                              _playerService.currentDuration.inSeconds
+                                  .toDouble(),
                           max: Duration(seconds: widget._track?.duration ?? 60)
                               .inSeconds
                               .toDouble(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            _bloc.add(SeekTrackEvent(
+                                position: Duration(seconds: value.toInt())));
+                          },
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -115,7 +120,9 @@ class _PlayerScreenState extends ABaseState<PlayerScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                data.data.totalDuration,
+                                data.data?.totalDuration ??
+                                    _playerService.currentDuration.totalDuration
+                                        .toString(),
                                 style: const TextStyle(
                                     fontSize: 15, color: Color(0xff404040)),
                               ),

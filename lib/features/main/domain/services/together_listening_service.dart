@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:garno_music/common/config.dart';
+import 'package:garno_music/features/main/domain/models/chat_history.dart';
 import 'package:garno_music/features/main/domain/models/track.dart';
 import 'package:garno_music/features/main/domain/repository/a_together_listening_repository.dart';
 import 'package:garno_music/features/main/domain/services/a_together_listening_service.dart';
@@ -24,6 +27,8 @@ class TogetherListeningService implements ITogetherListeningService {
   StreamController _streamDisconnectedController = StreamController();
   StreamController<String> _streamDisconnectedUserController =
       StreamController<String>();
+  StreamController<ChatHistory> _streamNewMessageController =
+      StreamController<ChatHistory>();
 
   HubConnection? _hubConnection;
   String _code = '';
@@ -49,6 +54,9 @@ class TogetherListeningService implements ITogetherListeningService {
       _streamDisconnectedUserController.stream;
 
   @override
+  Stream<ChatHistory> get onNewMessage => _streamNewMessageController.stream;
+
+  @override
   bool isConnected() {
     if (_hubConnection == null) {
       return false;
@@ -67,6 +75,7 @@ class TogetherListeningService implements ITogetherListeningService {
 
   @override
   Future<String> createRoom() async {
+    _flushStream();
     await _buildHubConnection();
 
     var res = await _hubConnection!
@@ -129,14 +138,33 @@ class TogetherListeningService implements ITogetherListeningService {
     await _hubConnection!.invoke('StopPlayingTrack', args: [_code]);
   }
 
+  @override
+  Future<List<ChatHistory>> getChatHistory() async {
+    if (_hubConnection != null &&
+        _hubConnection!.state == HubConnectionState.Connected) {
+      var jsonResult =
+          await _hubConnection!.invoke('GetChatHistories', args: [_code]);
+      var chatHistory = List.from(jsonDecode(jsonResult.toString()))
+          .map((e) => ChatHistory.fromJson(e))
+          .toList();
+      return chatHistory;
+    } else {
+      return [];
+    }
+  }
+
+  @override
+  Future sendMessage(String message) async {
+    await _hubConnection!.invoke('SendMessage', args: [message, _code]);
+  }
+
   Future _buildHubConnection() async {
     if (_hubConnection != null) {
       await _hubConnection!.stop();
     }
 
-    _hubConnection = HubConnectionBuilder()
-        .withUrl('http://192.168.0.183:5065/togetherListening')
-        .build();
+    _hubConnection =
+        HubConnectionBuilder().withUrl('$API_URL/togetherListening').build();
 
     await _hubConnection!.start();
   }
@@ -170,6 +198,11 @@ class TogetherListeningService implements ITogetherListeningService {
       _streamDisconnectedUserController.sink
           .add(data?.firstOrNull.toString() ?? '');
     });
+
+    _hubConnection!.on('NEW_MESSAGE', (data) {
+      _streamNewMessageController.sink
+          .add(ChatHistory.fromJson(jsonDecode(data!.first.toString())));
+    });
   }
 
   void _flushStream() {
@@ -179,6 +212,7 @@ class TogetherListeningService implements ITogetherListeningService {
     _streamResumePlayingController.close();
     _streamDisconnectedController.close();
     _streamDisconnectedUserController.close();
+    _streamNewMessageController.close();
 
     _streamNewJoinedController = StreamController<User>();
     _streamStartPlayingController = StreamController<String>();
@@ -186,5 +220,6 @@ class TogetherListeningService implements ITogetherListeningService {
     _streamResumePlayingController = StreamController<String>();
     _streamDisconnectedController = StreamController();
     _streamDisconnectedUserController = StreamController<String>();
+    _streamNewMessageController = StreamController<ChatHistory>();
   }
 }

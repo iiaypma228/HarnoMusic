@@ -8,6 +8,11 @@ class PlayTrackEvent extends PlayerEvent {
   final Track track;
 }
 
+class SeekTrackEvent extends PlayerEvent {
+  SeekTrackEvent({required this.position});
+  final Duration position;
+}
+
 class PausePlayingEvent extends PlayerEvent {}
 
 class ResumePlayerEvent extends PlayerEvent {}
@@ -25,6 +30,11 @@ class GetRoomStateEvent extends PlayerEvent {}
 
 class LeaveRoomEvent extends PlayerEvent {}
 
+class SendMessageEvent extends PlayerEvent {
+  SendMessageEvent({required this.message});
+  final String message;
+}
+
 class _UserJoinedEvent extends PlayerEvent {
   _UserJoinedEvent({required this.user});
   final User user;
@@ -33,4 +43,10 @@ class _UserJoinedEvent extends PlayerEvent {
 class _UserDisconnectedEvent extends PlayerEvent {
   _UserDisconnectedEvent({required this.user});
   final User user;
+}
+
+class _NewMessageEvent extends PlayerEvent {
+  final ChatHistory message;
+
+  _NewMessageEvent({required this.message});
 }

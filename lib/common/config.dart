@@ -1,1 +1,1 @@
-const API_URL = 'http://192.168.0.183:5065';
+const API_URL = 'http://192.168.250.97:5065';

@@ -26,10 +26,14 @@ class PlayingResumeState extends PlayerState {
   final Track track;
 }
 
+class RoomStateLoading extends PlayerState {}
+
 class RoomStateLoaded extends PlayerState {
-  RoomStateLoaded({required this.code, required this.users});
+  RoomStateLoaded(
+      {required this.code, required this.users, required this.chatHistory});
   final String code;
   final List<User> users;
+  final List<ChatHistory> chatHistory;
 }
 
 class RoomCreatingState extends PlayerState {}
@@ -42,9 +46,11 @@ class RoomCreatedState extends PlayerState {
 class ConnectingToRoomState extends PlayerState {}
 
 class ConnectingToRoomSuccess extends PlayerState {
-  ConnectingToRoomSuccess({required this.code, required this.users});
+  ConnectingToRoomSuccess(
+      {required this.code, required this.users, required this.chatHistory});
   final String code;
   final List<User> users;
+  final List<ChatHistory> chatHistory;
 }
 
 class ConnectingToRoomError extends PlayerState {
@@ -60,4 +66,9 @@ class UserConnectedToRoom extends PlayerState {
 class UserDisconnectedFromRoom extends PlayerState {
   UserDisconnectedFromRoom({required this.user});
   final User user;
+}
+
+class NewRoomMessage extends PlayerState {
+  NewRoomMessage({required this.message});
+  final ChatHistory message;
 }

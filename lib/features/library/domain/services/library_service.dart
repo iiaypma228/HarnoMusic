@@ -24,6 +24,7 @@ class LibraryService implements ILibraryService {
   Future<ServerResponse<PlayList>> getLikedPlayList() async {
     var res = await _repository.getLikesTrack();
     if (res.isSuccess) {
+      _configureImageTracks(res.data!);
       var playList = PlayList(
           id: -2, name: S.current.likesTrack, userId: -1, tracks: res.data!);
       return ServerResponse<PlayList>(

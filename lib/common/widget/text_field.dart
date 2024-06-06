@@ -11,13 +11,15 @@ class BaseTextField extends m.StatefulWidget {
       this.suffixIcon,
       this.obscureText,
       this.validator,
-      this.onChange});
+      this.onChange,
+      this.textEditingController});
 
   final String? hintText;
   final bool? expands;
   final Widget? suffixIcon;
   final bool? obscureText;
   final String? Function(String?)? validator;
+  final m.TextEditingController? textEditingController;
   final void Function(String?)? onChange;
   @override
   m.State<BaseTextField> createState() => _BaseTextFieldState();
@@ -36,11 +38,13 @@ class _BaseTextFieldState extends m.State<BaseTextField> {
   @override
   m.Widget build(m.BuildContext context) {
     return m.TextFormField(
+      controller: widget.textEditingController,
       onChanged: widget.onChange,
       validator: widget.validator,
-      maxLines: null,
-      //obscureText: widget.obscureText ?? false,
-      expands: widget.expands ?? false,
+      maxLines: 1,
+      obscureText: widget.obscureText ?? false,
+
+      //expands: widget.expands ?? false,
       decoration: m.InputDecoration(
         errorBorder: _errorBorder,
         suffixIcon: widget.suffixIcon,

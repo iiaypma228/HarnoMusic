@@ -10,6 +10,7 @@ import 'package:garno_music/router/router.dart';
 
 import '../../../common/di/init.dart';
 import '../../../common/widget/track_list.dart';
+import '../../library/presentation/widget/search_track_delegate.dart';
 import '../../library/presentation/widget/sort_list.dart';
 
 @RoutePage()
@@ -31,20 +32,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BlocBuilder<TrackHistoryBloc, TrackHistoryState>(
-            bloc: _bloc,
-            builder: (context, state) {
-              if (state is TrackHistoryLoading) {
-                return const Loading();
-              } else if (state is TrackHistoryLoaded) {
-                return _getBody(state);
-              }
-              return const Placeholder();
-            }),
-      ),
-    );
+    return BlocBuilder<TrackHistoryBloc, TrackHistoryState>(
+        bloc: _bloc,
+        builder: (context, state) {
+          if (state is TrackHistoryLoading) {
+            return const Scaffold(
+              body: Loading(),
+            );
+          } else if (state is TrackHistoryLoaded) {
+            return _getBody(state);
+          }
+          return const Placeholder();
+        });
   }
 
   Widget _getBody(TrackHistoryLoaded state) {
@@ -53,31 +52,34 @@ class _HistoryScreenState extends State<HistoryScreen> {
         name: 'Історія',
         userId: 0,
         tracks: state.history.map((e) => e.track).toList());
-    return Column(
-      children: [
-        Container(
-          color: const Color(0xffAAAAAA).withOpacity(0.13),
-          child: Row(
-            children: [
-              const BackButton(),
-              const Spacer(),
-              Text(playList.name),
-              const Spacer(),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Hicons.search_1_light_outline)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
-            ],
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: SearchTrackPlayListDelegate(
+                        playLists: playList.tracks));
+              },
+              icon: const Icon(Hicons.search_1_light_outline))
+        ],
+        title: Text(playList.name),
+        leading: const BackButton(),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: SortList(
+            tracks: playList.tracks,
+            builder: (context) => TrackList(
+              needExpanded: false,
+              tracks: playList.tracks,
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: SortList(tracks: playList.tracks, onSorted: (tracks) {}),
-        ),
-        TrackList(
-          tracks: playList.tracks,
-        ),
-      ],
+      ),
     );
   }
 }

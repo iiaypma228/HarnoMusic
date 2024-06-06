@@ -88,7 +88,7 @@ abstract class _$AppRouter extends RootStackRouter {
     RoomRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const RoomScreen(),
+        child: RoomScreen(),
       );
     },
     SearchRoute.name: (routeData) {
